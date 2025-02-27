@@ -5,50 +5,50 @@ SCRIPT_PATH=`dirname $SCRIPT`
 BASE_PATH=`dirname $SCRIPT_PATH`
 
 RETVAL=0
-VERSION=4.8.1
-SUBVERSION=2
+VERSION=4.17.1
+SUBVERSION=1
 IMAGE_NAME="alpine_adminer"
 TAG=`date '+%Y%m%d_%H%M%S'`
 
 case "$1" in
 	
 	test)
-		docker build ./ -t bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-$TAG --file Dockerfile
+		docker build ./ -t lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-$TAG --file Dockerfile
 	;;
 	
 	amd64)
-		docker build ./ -t bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64 \
+		docker build ./ -t lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64 \
 			--file Dockerfile --build-arg ARCH=-amd64
 	;;
 	
 	arm64v8)
-		docker build ./ -t bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8 \
+		docker build ./ -t lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8 \
 			--file Dockerfile --build-arg ARCH=-arm64v8
 	;;
 	
 	arm32v7)
-		docker build ./ -t bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7 \
+		docker build ./ -t lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7 \
 			--file Dockerfile --build-arg ARCH=-arm32v7
 	;;
 	
 	manifest)
-		rm -rf ~/.docker/manifests/docker.io_bayrell_alpine_php_fpm-*
+		rm -rf ~/.docker/manifests/docker.io_lexinzector_alpine_php_fpm-*
 		
-		docker push bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64
-		docker push bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8
-		docker push bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7
+		docker push lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64
+		docker push lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8
+		docker push lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7
 		
-		docker manifest create bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION \
-			--amend bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64 \
-			--amend bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8 \
-			--amend bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7
-		docker manifest push bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION
+		docker manifest create lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION \
+			--amend lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64 \
+			--amend lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8 \
+			--amend lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7
+		docker manifest push lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION
 		
-		docker manifest create bayrell/$IMAGE_NAME:$VERSION \
-			--amend bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64 \
-			--amend bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8 \
-			--amend bayrell/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7
-		docker manifest push bayrell/$IMAGE_NAME:$VERSION
+		docker manifest create lexinzector/$IMAGE_NAME:$VERSION \
+			--amend lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64 \
+			--amend lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8 \
+			--amend lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7
+		docker manifest push lexinzector/$IMAGE_NAME:$VERSION
 	;;
 	
 	all)

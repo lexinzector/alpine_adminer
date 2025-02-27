@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <template>
-	<uid>org.bayrell.alpine_adminer</uid>
+	<uid>info.bylex.alpine_adminer</uid>
 	<name>Adminer</name>
-	<version>4.8.1-2</version>
-	<maintainer>Ildar &lt;ildar@bayrell.org&gt;</maintainer>
+	<version>4.17.1-1</version>
+	<maintainer>Alexey (lexinzector) Mikhalev &lt;lexin.ucoz.ru@gmail.com&gt;</maintainer>
 	<marketplace>https://cloud.bayrell.org/</marketplace>
-	<link name="Docker hub">https://hub.docker.com/r/bayrell/alpine_adminer</link>
-	<link name="Github">https://github.com/bayrell-os/alpine_adminer</link>
-	<xml name="bayrell.org">https://cloud.bayrell.org/marketplace/org.bayrell.alpine_adminer.xml</xml>
-	<xml name="github.com">https://raw.githubusercontent.com/bayrell-os/alpine_adminer/main/org.bayrell.alpine_adminer.xml</xml>
-	<date>2022-05-14T17:44:00+06:00</date>
+	<link name="Docker hub">https://hub.docker.com/r/lexinzector/alpine_adminer</link>
+	<link name="Github">https://github.com/lexinzector/alpine_adminer</link>
+	<xml name="github.com">https://raw.githubusercontent.com/lexinzector/alpine_adminer/main/info.bylex.alpine_adminer.xml</xml>
+	<date>2025-02-27T22:44:00+05:00</date>
 	<changelog lang="ru">
-Добавлен PostgreSQL
+Adminer обновлен до версии 4.17.1
 	</changelog>
 	<yaml>
 		<services>
 			<_var_app_name_>
-				<image>bayrell/alpine_adminer:4.8.1-2</image>
+				<image>lexinzector/alpine_adminer:4.17.1-1</image>
 				<hostname>{{.Service.Name}}.{{.Task.ID}}.local</hostname>
 				<environment>
 					<MYSQL_HOST>_var_mysql_host_</MYSQL_HOST>
