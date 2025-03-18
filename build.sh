@@ -1,68 +1,75 @@
 #!/bin/bash
 
-SCRIPT=$(readlink -f $0)
-SCRIPT_PATH=`dirname $SCRIPT`
-BASE_PATH=`dirname $SCRIPT_PATH`
+SCRIPT=$(readlink -f "$0")
+SCRIPT_PATH=$(dirname "$SCRIPT")
+BASE_PATH=$(dirname "$SCRIPT_PATH")
 
 RETVAL=0
 VERSION=5.0.6
 SUBVERSION=1
 IMAGE_NAME="alpine_adminer"
-TAG=`date '+%Y%m%d_%H%M%S'`
+TAG=$(date '+%Y%m%d_%H%M%S')
+REGISTRY="docker.io/lexinzector"
+
+build_and_push() {
+    local ARCH=$1
+    local PLATFORM=$2
+    local FULL_TAG="$REGISTRY/$IMAGE_NAME:$VERSION-$SUBVERSION-$ARCH"
+
+    echo "Building for $ARCH ($PLATFORM)..."
+    docker buildx build --platform "$PLATFORM" -t "$FULL_TAG" --file Dockerfile . --push
+}
+
+create_manifest() {
+    echo "Creating and pushing multi-arch manifest..."
+
+    docker buildx imagetools create -t "$REGISTRY/$IMAGE_NAME:$VERSION-$SUBVERSION" \
+        "$REGISTRY/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64" \
+        "$REGISTRY/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8" \
+        "$REGISTRY/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7"
+
+    docker buildx imagetools create -t "$REGISTRY/$IMAGE_NAME:$VERSION" \
+        "$REGISTRY/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64" \
+        "$REGISTRY/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8" \
+        "$REGISTRY/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7"
+}
 
 case "$1" in
-	
-	test)
-		docker build ./ -t lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-$TAG --file Dockerfile
-	;;
-	
-	amd64)
-		docker build ./ -t lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64 \
-			--file Dockerfile --build-arg ARCH=-amd64
-	;;
-	
-	arm64v8)
-		docker build ./ -t lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8 \
-			--file Dockerfile --build-arg ARCH=-arm64v8
-	;;
-	
-	arm32v7)
-		docker build ./ -t lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7 \
-			--file Dockerfile --build-arg ARCH=-arm32v7
-	;;
-	
-	manifest)
-		rm -rf ~/.docker/manifests/docker.io_lexinzector_alpine_php_fpm-*
-		
-		docker push lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64
-		docker push lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8
-		docker push lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7
-		
-		docker manifest create lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION \
-			--amend lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64 \
-			--amend lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8 \
-			--amend lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7
-		docker manifest push lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION
-		
-		docker manifest create lexinzector/$IMAGE_NAME:$VERSION \
-			--amend lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-amd64 \
-			--amend lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm64v8 \
-			--amend lexinzector/$IMAGE_NAME:$VERSION-$SUBVERSION-arm32v7
-		docker manifest push lexinzector/$IMAGE_NAME:$VERSION
-	;;
-	
-	all)
-		$0 amd64
-		$0 arm64v8
-		$0 arm32v7
-		$0 manifest
-	;;
-	
-	*)
-		echo "Usage: $0 {amd64|arm64v8|arm32v7|manifest|all|test}"
-		RETVAL=1
+
+    test)
+        docker buildx build --platform linux/amd64 \
+            -t "$REGISTRY/$IMAGE_NAME:$VERSION-$SUBVERSION-$TAG" \
+            --file Dockerfile .
+    ;;
+
+    amd64)
+        build_and_push "amd64" "linux/amd64"
+    ;;
+
+    arm64v8)
+        build_and_push "arm64v8" "linux/arm64/v8"
+    ;;
+
+    arm32v7)
+        build_and_push "arm32v7" "linux/arm/v7"
+    ;;
+
+    manifest)
+        create_manifest
+    ;;
+
+    all)
+        $0 amd64
+        $0 arm64v8
+        $0 arm32v7
+        $0 manifest
+    ;;
+
+    *)
+        echo "Usage: $0 {amd64|arm64v8|arm32v7|manifest|all|test}"
+        RETVAL=1
+    ;;
 
 esac
 
 exit $RETVAL
-
