@@ -5,7 +5,7 @@ SCRIPT_PATH=`dirname $SCRIPT`
 BASE_PATH=`dirname $SCRIPT_PATH`
 
 RETVAL=0
-VERSION=4.17.1
+VERSION=5.0.6
 SUBVERSION=1
 IMAGE_NAME="alpine_adminer"
 TAG=`date '+%Y%m%d_%H%M%S'`
