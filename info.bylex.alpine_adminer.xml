@@ -2,20 +2,21 @@
 <template>
 	<uid>info.bylex.alpine_adminer</uid>
 	<name>Adminer</name>
-	<version>5.0.6-1</version>
+	<version>5.3.0-1</version>
 	<maintainer>Alexey (lexinzector) Mikhalev &lt;lexin.ucoz.ru@gmail.com&gt;</maintainer>
 	<marketplace>https://cloud.bayrell.org/</marketplace>
 	<link name="Docker hub">https://hub.docker.com/r/lexinzector/alpine_adminer</link>
 	<link name="Github">https://github.com/lexinzector/alpine_adminer</link>
 	<xml name="github.com">https://raw.githubusercontent.com/lexinzector/alpine_adminer/main/info.bylex.alpine_adminer.xml</xml>
-	<date>2025-03-18T16:04:00+05:00</date>
+	<date>2025-06-12T16:04:00+05:00</date>
 	<changelog lang="ru">
-Adminer обновлен до версии 5.0.6
+- Adminer обновлен до версии 5.3.0
+- Добавлены всевозможные плагины с официального сайта
 	</changelog>
 	<yaml>
 		<services>
 			<_var_app_name_>
-				<image>lexinzector/alpine_adminer:5.0.6-1</image>
+				<image>lexinzector/alpine_adminer:5.3.0-1</image>
 				<hostname>{{.Service.Name}}.{{.Task.ID}}.local</hostname>
 				<environment>
 					<MYSQL_HOST>_var_mysql_host_</MYSQL_HOST>

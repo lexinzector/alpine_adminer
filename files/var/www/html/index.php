@@ -4,7 +4,7 @@
 <body>
 
 <div>Redirect. Please wait...</div>
-<form id="adminer_form" method="post" action="./adminer-5.0.6.php">
+<form id="adminer_form" method="post" action="./adminer-5.3.0.php">
 	<input type='hidden' name='auth[driver]' value='server' />
 	<input type='hidden' name='auth[server]' value='<?= getenv("MYSQL_HOST") ?>' />
 	<input type='hidden' name='auth[username]' value='<?= getenv("MYSQL_LOGIN") ?>' />
