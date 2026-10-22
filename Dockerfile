@@ -2,7 +2,7 @@
 ARG TARGETPLATFORM
 
 # Используем базовый образ без явного указания платформы
-FROM docker.io/lexinzector/alpine_php_fpm:7.4-12
+FROM docker.io/lexinzector/alpine_php_fpm:7.4-13
 
 # Копируем файлы
 ADD files /src/files
